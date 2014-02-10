@@ -346,11 +346,14 @@ public class Clock extends TextView implements DemoMode {
         mAmPmStyle = is24hour ? AM_PM_STYLE_GONE : amPmStyle;
         mClockFormatString = "";
 
+<<<<<<< HEAD
+=======
         if (mAmPmStyle != amPmStyle) {
             mAmPmStyle = amPmStyle;
             mClockFormatString = "";
         }
 
+>>>>>>> 5af64da... SystemUI: Improve battery life for chameleon engine
         second = new TimerTask()
         {
             @Override
