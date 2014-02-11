@@ -31,7 +31,6 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
-import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
@@ -383,10 +382,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private BatteryCircleMeterView mCircleBattery;
     
     //Chameleon
-    private boolean mIsInKeyguard;
     private int mStatusBarColor;
     private String mPackageName;
-    private KeyguardManager mKeyguardManager;
     private ArrayList<ImageView> mIcons = new ArrayList<ImageView>();
     private ArrayList<TextView> mTexts = new ArrayList<TextView>();
     private int mCurrentColor = Color.WHITE;
@@ -1393,7 +1390,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         addText((TextView) mStatusBarView.findViewById(R.id.center_clock));
         addText((TextView) mStatusBarView.findViewById(R.id.clock));
 
-        mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mBroadcastReceiver.onReceive(mContext,
                 new Intent(pm.isScreenOn() ? Intent.ACTION_SCREEN_ON : Intent.ACTION_SCREEN_OFF));
@@ -4460,7 +4456,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 				mTexts.remove(tv);
 			}
 		}
-		mCircleBattery.setCircleColor(color);
+ 		mCircleBattery.setCircleColor(mCurrentColor);
+ 		mBattery.mChameleonBatteryColor = mCurrentColor;
+		mBattery.mChameleonBoltColor = isGray(mCurrentColor) ? Color.BLACK : Color.WHITE;
+		mBattery.mChameleonBoltColor = mStatusBarColor;
+ 		mBattery.updateBattery();
+ 		mBattery.invalidate();
 	}
 
 	private void updateBackgroundDelayed() {
