@@ -4458,7 +4458,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 		}
  		mCircleBattery.setCircleColor(mCurrentColor);
  		mBattery.mChameleonBatteryColor = mCurrentColor;
-		mBattery.mChameleonBoltColor = isGray(mCurrentColor) ? Color.BLACK : Color.WHITE;
 		mBattery.mChameleonBoltColor = mStatusBarColor;
  		mBattery.updateBattery();
  		mBattery.invalidate();
