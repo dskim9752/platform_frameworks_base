@@ -1422,10 +1422,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mBattery = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
         mCircleBattery = (BatteryCircleMeterView) mStatusBarView.findViewById(R.id.circle_battery);
         updateBatteryIcons();
-
         mNetworkController.setListener(this);
 
-        updateBackground();
         return mStatusBarView;
     }
     
@@ -3795,6 +3793,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 finishBarAnimations();
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 mScreenOn = true;
+               mMustChange = true;
                 // work around problem where mDisplay.getRotation() is not stable while screen is off (bug 7086018)
                 repositionNavigationBar();
                 notifyNavigationBarScreenOn(true);
@@ -4328,14 +4327,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 				mTransparent = true;
 				mStatusBarView.setBackgroundColor(Color.TRANSPARENT);
 			}
-			int mSysColor = getSysColor();
-			transform(isGray(mSysColor));		
+                        int mSysColor = getSysColor();		
 			if (mSysColor == mStatusBarColor) {
-				updateBackgroundDelayed();
-				return;
+			    if(!mMustChange) {
+			        updateBackgroundDelayed();
+			        return;
+		            }
+                            mMustChange = false;
 			} else {
 				mStatusBarColor = mSysColor;
 			}
+                        transform(isGray(mSysColor));
 			if (mTransparent) {
 				mStatusBarView.setBackgroundColor(Color.TRANSPARENT);
 				updateBackgroundDelayed();
